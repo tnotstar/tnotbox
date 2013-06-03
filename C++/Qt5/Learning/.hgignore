@@ -1,0 +1,7 @@
+# .hgignore - excludes the `build` directory
+
+syntax: glob
+build/**
+**/*.pro.user
+
+# EOF
