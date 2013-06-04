@@ -1,0 +1,8 @@
+# .hgignore - to exclude temporary files
+
+syntax: glob
+
+**/build/**
+**/*.pro.user
+
+# EOF
