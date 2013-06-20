@@ -1,0 +1,1 @@
+#!/usr/bin/env python3# -*- coding: utf-8 -*-from os.path import joinfrom joblib import Parallel, delayeddef lets_go(a, *p):    rs = join(a, *p)    print("Calling `lets_go({0}, {1})` = {rs}".format(a, *p, rs=rs))    return rsif __name__ == '__main__':    Parallel(2)(        delayed(lets_go)('/etc/', s) for s in 'abcdefgh')# EOF
