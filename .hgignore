@@ -3,6 +3,7 @@
 syntax: glob
 
 **/build/**
+**/__pycache__
 **/*.p
 **/*.pdf
 **/*.pro.user
