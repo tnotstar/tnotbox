@@ -1,3 +1,67 @@
+Homework #2: The Dijkstra's algorithm implementation
+===============================================
+
+Introduction
+-----------
+
+In this homework we implemented a Monte Carlo simulation to calculate the average shortest path length of a random graph, using the Dijkstra's algorithm \[1\]. With this implementation, we executed two experiments with graphs of size 50 nodes and densities of 20% and 40% respectively.
+
+As result of these experiments, we found that, on average, the shortest path distance between each two nodes from given graphs were: 5.495072 and 3.875268. This results were calculted as the mean of the results from 10 executions of each experiment.
+
+The program was implemented as a single program unit (v.gr. a source file), it compiled as it shows following listing.
+
+````
+$ CXX='g++ -std=gnu++11' make ira_hw02_dijkstra
+g++ -std=gnu++11     ira_hw02_dijkstra.cpp   -o ira_hw02_dijkstra
+````
+
+Then, the following is a listing with the output screen from one of these executions.
+
+```
+$ ./ira_hw02_dijkstra
+Average shortest path for experiment #1 is: 4.8015
+Average shortest path for experiment #2 is: 3.39115
+````
+
+The program was compiled using version 4.8.1 of the GNU Compiler Collection (GCC).
+
+Desing and implementation details
+------------------------------
+
+The program was implemented using three basic objects: (1) a template class (named `graph`) which implements the abstract data type (ADT) graph, (2) another class (called `shortest_path_finder`) which is a functor object with our Dijkstra's algorithm implementation, and (3) an utility class (called `graph_experiment`) to encapsulate the experiment workflow.
+
+Two utility operators were also implemented to made it easy to print debugging messages. In this way, the program entry-point (v.gr. the `main` function) was keep it as simple as posible like it showed in the following partial listing.
+
+```
+int
+main () {
+
+    graph_experiment ex1(DEFAULT_SAMPLE_SIZE, 0.2, 1.0, 10.0);
+    cout << "Average shortest path for experiment #1 is: " << ex1.simulate() << endl;
+
+    graph_experiment ex2(DEFAULT_SAMPLE_SIZE, 0.4, 1.0, 10.0);
+    cout << "Average shortest path for experiment #2 is: " << ex2.simulate() << endl;
+}
+```
+
+Auxiliary types were also defined, in the scope of each of these basic constructs. For example, a priority queue class inside the `shortest_path_finder` declaration (see source code below).
+
+The graph ADT is based upon the use of the standard template library (STL) \[2\]. The base container selected was the `unordered_map`, because the given low density values. We are assuming here that sparce graph could be implemented most efficiently, with an adjacency list scheme. The use of a template class is justified because we pretend to make use of this graph class in further works.
+
+References
+----------
+
+The following resources were consulted during the preparation of this work.
+
+  * \[1\]. Wikipedia's article about "Dijkstra's algorithm". http://en.wikipedia.org/wiki/Dijkstra's_algorithm
+  * \[2\]. The cplusplus.com reference site. http://www.cplusplus.com/
+
+Source code
+-----------
+
+Following is a complete listing of this homework implementation.
+
+```
 //
 // ira_hw02_disktra.cpp: Homework #2 from "C++ for C programmers".
 //
@@ -457,4 +521,6 @@ main () {
     graph_experiment ex2(DEFAULT_SAMPLE_SIZE, 0.4, 1.0, 10.0);
     cout << "Average shortest path for experiment #2 is: " << ex2.simulate() << endl;
 }
+
+```
 
