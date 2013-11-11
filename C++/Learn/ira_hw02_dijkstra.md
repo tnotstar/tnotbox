@@ -10,10 +10,10 @@ As result of these experiments, we found that, on average, the shortest path dis
 
 The program was implemented as a single program unit (v.gr. a source file), it compiled as it shows following listing.
 
-````
+```
 $ CXX='g++ -std=gnu++11' make ira_hw02_dijkstra
 g++ -std=gnu++11     ira_hw02_dijkstra.cpp   -o ira_hw02_dijkstra
-````
+```
 
 Then, the following is a listing with the output screen from one of these executions.
 
@@ -21,7 +21,7 @@ Then, the following is a listing with the output screen from one of these execut
 $ ./ira_hw02_dijkstra
 Average shortest path for experiment #1 is: 4.8015
 Average shortest path for experiment #2 is: 3.39115
-````
+```
 
 The program was compiled using version 4.8.1 of the GNU Compiler Collection (GCC).
 
@@ -32,7 +32,7 @@ The program was implemented using three basic objects: (1) a template class (nam
 
 Two utility operators were also implemented to made it easy to print debugging messages. In this way, the program entry-point (v.gr. the `main` function) was keep it as simple as posible like it showed in the following partial listing.
 
-```
+```{.cpp}
 int
 main () {
 
@@ -61,7 +61,7 @@ Source code
 
 Following is a complete listing of this homework implementation.
 
-```
+```{.cpp}
 //
 // ira_hw02_disktra.cpp: Homework #2 from "C++ for C programmers".
 //

@@ -1,3 +1,104 @@
+Homework #3: The Minimum Spanning Tree
+======================================
+
+Introduction
+-----------
+
+In this homework we implemented the **Prim-Jarník Algorithm**\[1\] to calculate the *minimum spanning tree (MST)* of a given *undirected graph*. With this implementation, we ran our program with the sample data file available from the *"C++ for C Programmers"* course's web site; to obtain a result tree with its corresponding cost value.
+
+The program was implemented as a single program unit (v.gr. a single source file), it was compiled as it shown below:
+
+```
+$ CXX='g++ -std=gnu++11' make ira_hw03_mst
+g++ -std=gnu++11     ira_hw03_mst.cpp   -o ira_hw03_mst
+```
+
+Thus, it was executed and debugged until no errors found. Following is a listing of the output screen from one of these successfully executions.
+
+```
+$ ./ira_hw03_mst 
+The minimum spanning tree is: MST<
+ (19, 15) = 2
+ (15, 10) = 2
+ (10, 7) = 2
+ (7, 4) = 1
+ (4, 8) = 1
+ (8, 9) = 3
+ (9, 2) = 1
+ (2, 0) = 2
+ (9, 13) = 3
+ (9, 12) = 3
+ (12, 17) = 1
+ (12, 11) = 1
+ (11, 14) = 1
+ (12, 3) = 1
+ (14, 18) = 1
+ (17, 1) = 1
+ (1, 6) = 1
+ (6, 5) = 1
+ (5, 16) = 2
+>, and it has a cost of: 30
+```
+
+The program was compiled using *version 4.8.1* of the **GNU Compiler Collection (GCC)**, on a *GNU/Linux-based* laptop.
+
+```
+$ gcc --version
+gcc (GCC) 4.8.2
+Copyright (C) 2013 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+$ uname -a
+Linux nietzsche 3.11.6-1-ARCH #1 SMP PREEMPT Fri Oct 18 23:22:36 CEST 2013 x86_64 GNU/Linux
+```
+
+Desing and implementation details
+------------------------------
+
+The program was built extending our graph implementation from the *homework #2*.  This implementation includes the declaration of an *abstract data type (ADT)* written as a *template class* with two parametric data types: *`NodeLabel`* and *`EdgeCost`*, to guarantee its reutilization. The need for reutilization is justified because we pretend to make use of this graph class in further works.
+
+The `graph` ADT is based upon the use of the *standard template library (STL)* \[2\]. The base container selected was the `unordered_map`, because its low density values. We are assuming here that a *sparce graph* could be implemented most efficiently with an adjacency list scheme, but a *map-like* structure should be more generic. Then it could make our algorithm independent from the *integer labels* assumption (e.g. nodes can be labelled with other data types, for example with `string` labels).
+
+The *Prim-Jarník algorithm* was also implemented through a *template class* (named `minimum_spanning_tree`) which store the resulting tree inside it. Last tree is calculated at *construction time* by a call to the *private method `calculate_by_prim`* from its unique constructor.
+
+Two utility operators were also implemented to made it easy to print debugging messages. As explained in the *Module #4* video lectures, we used the `friend` keyword to get access to internal representation of the objects of classes `graph` and `minimum_spanning_tree`.
+
+Finally, our original *extractor operator `operator<<`* from the *homework #02*, was modified to write a graph specification in **dot format** \[3\]. With this new version, we create a graphic representation of the *input graph*, which it's better for debugging.
+
+By this way, the program entry-point (v.gr. the `main` function) was keep it as simple as posible like it showed in the following partial listing.
+
+```{.cpp}
+int
+main () {
+    typedef graph<int, double> graph_type;
+
+    graph_type the_graph(DEFAULT_FILENAME);
+
+    minimum_spanning_tree<graph_type> the_mst(the_graph);
+
+    cout << "The minimum spanning tree is: " << the_mst
+         << ", and it has a cost of: " << the_mst.total_cost() << endl;
+
+    return 0;
+}
+```
+
+References
+----------
+
+The following resources were consulted during the preparation of this work.
+
+  * \[1\]. Wikipedia's article about "Prim's algorithm". http://en.wikipedia.org/wiki/Prim_algorithm
+  * \[2\]. The cplusplus.com reference site. http://www.cplusplus.com
+  * \[3\]. Graphviz - Graph Visualization Software. http://www.graphviz.org
+
+Source code
+-----------
+
+Following is a complete listing of this homework implementation.
+
+```{.cpp}
 //
 // ira_hw03_mst.cpp: Homework #3 from "C++ for C programmers".
 //
@@ -305,4 +406,5 @@ main () {
 
     return 0;
 }
+```
 
