@@ -2,6 +2,8 @@
 
 syntax: glob
 
+**/debug/**
+**/release/**
 **/build/**
 **/__pycache__
 **/*.p
