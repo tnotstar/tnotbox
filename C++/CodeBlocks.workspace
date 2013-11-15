@@ -2,5 +2,6 @@
 <CodeBlocks_workspace_file>
 	<Workspace title="C++ Sandbox">
 		<Project filename="Miscellaneous/Hello/Hello.cbp" />
+		<Project filename="Learn/HEX.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

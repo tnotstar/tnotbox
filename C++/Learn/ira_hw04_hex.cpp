@@ -2,7 +2,7 @@
 // ira_hw03_mst.cpp: Homework #4 from "C++ for C programmers".
 //
 
-#include "dense_graph.hpp"
+#include "sparse_graph.hpp"
 
 #include <iostream>
 
@@ -16,7 +16,7 @@ const size_t DEFAULT_GRAPH_SIZE = 1000000;
 int
 main () {
 
-    dense_graph<double> g(DEFAULT_GRAPH_SIZE);
+    sparse_graph<int, double, double> g(DEFAULT_GRAPH_SIZE);
 
     g.add_edge(0, 1, 1.2);
     g.add_edge(0, 3, 1.2);
@@ -24,6 +24,7 @@ main () {
     g.add_edge(2, 3, 1.2);
     g.add_edge(3, 4, 1.2);
 
+    cout << g << endl;
+
     return 0;
 }
-
