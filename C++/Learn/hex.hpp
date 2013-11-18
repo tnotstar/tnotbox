@@ -18,7 +18,7 @@ namespace hex {
      * An enumerator class for the colors of HEX.
      */
     enum class color {
-        UNKNOWN = 0,
+        EMPTY = 0,
         BLUE,
         RED
     };
@@ -39,7 +39,7 @@ namespace hex {
          * relative coordinates `(x, y)`.
          */
          cell(const index_type& x=0, const index_type& y=0,
-                const color_type& the_color=color::UNKNOWN) :
+                const color_type& the_color=color::EMPTY) :
             _x(x), _y(y), _color(the_color)
         {}
 
@@ -47,7 +47,7 @@ namespace hex {
          * Builds an instance of the class cell, from a given label string.
          */
         cell(const std::string& label,
-                const color_type& the_color=color::UNKNOWN) :
+                const color_type& the_color=color::EMPTY) :
             _x(0), _y(0), _color(the_color)
         {
             if (label.size() > 1) {
@@ -165,7 +165,7 @@ namespace hex {
         color_at(const index_type& x, const index_type& y) const {
             cell the_cell(x, y);
             if (!exists(the_cell))
-                return color::UNKNOWN;
+                return color::EMPTY;
 
             auto label = the_cell.get_label();
             return _graph.value_at(label).get_color();
@@ -190,7 +190,7 @@ namespace hex {
                 return false;
 
             auto value = _graph.value_at(the_cell.get_label());
-            return value.get_color() == color::UNKNOWN;
+            return value.get_color() == color::EMPTY;
         }
 
         /**
@@ -198,6 +198,7 @@ namespace hex {
          */
         bool
         has_winner() const {
+            graph::minimum_spanning_tree<graph_type> mst(_graph);
             return true;
         }
 
