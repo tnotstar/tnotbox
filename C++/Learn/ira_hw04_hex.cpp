@@ -2,13 +2,14 @@
 // ira_hw03_mst.cpp: Homework #4 from "C++ for C programmers".
 //
 
-#include "sparse_graph.hpp"
+#include "hex.hpp"
 
 #include <iostream>
 
 using namespace std;
+using namespace hex;
 
-const size_t DEFAULT_GRAPH_SIZE = 1000000;
+const size_t DEFAULT_BOARD_SIZE = 11;
 
 /**
  * This is the program's entry-point.
@@ -16,15 +17,8 @@ const size_t DEFAULT_GRAPH_SIZE = 1000000;
 int
 main () {
 
-    sparse_graph<int, double, double> g(DEFAULT_GRAPH_SIZE);
-
-    g.add_edge(0, 1, 1.2);
-    g.add_edge(0, 3, 1.2);
-    g.add_edge(0, 4, 1.2);
-    g.add_edge(2, 3, 1.2);
-    g.add_edge(3, 4, 1.2);
-
-    cout << g << endl;
+    game game(DEFAULT_BOARD_SIZE);
+    game.play();
 
     return 0;
 }

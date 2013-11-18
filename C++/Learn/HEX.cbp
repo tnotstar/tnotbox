@@ -32,8 +32,9 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="graph.hpp" />
+		<Unit filename="hex.hpp" />
 		<Unit filename="ira_hw04_hex.cpp" />
-		<Unit filename="sparse_graph.hpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
