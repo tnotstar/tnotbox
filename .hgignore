@@ -3,11 +3,13 @@
 syntax: glob
 
 **/debug/**
-**/release/**
 **/build/**
+**/release/**
 **/__pycache__
 **/*.p
 **/*.pdf
 **/*.pro.user
+**/*.depend
+**/*.layout
 
 # EOF
