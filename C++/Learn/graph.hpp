@@ -1,5 +1,5 @@
 //
-// graph.hpp: some implementations of graph type and its algorithms
+// graph.hpp: a implementation of the graph adt and some of its algorithms.
 //
 
 #ifndef GRAPH_HPP_INCLUDED
@@ -15,12 +15,8 @@ namespace graph {
 
     /**
      * A template class to store a sparse undirected graph, with node
-     * labels of type `NodeLabel`, values of type `NodeValue` and
-     * edge's costs of type `EdgeCost`.
-     *
-     * This class is based upon the use of the STL type `unordered_map`.
-     * With this implementation algorithms are trivial and so we put all
-     * them in its inlined form.
+     * labels of type `NodeLabel`, values of type `NodeValue`, and
+     * edge's costs of the type `EdgeCost`.
      */
     template <typename NodeLabel, typename NodeValue, typename EdgeCost>
     class sparse_graph {
@@ -34,76 +30,87 @@ namespace graph {
         /// A type declaration for the edge's cost type.
         typedef EdgeCost cost_type;
 
-        /// A type declaration for the graph sizes.
-        typedef std::size_t size_type;
+        /// A type declaration for the number of nodes and edges.
+        typedef typename std::size_t size_type;
 
+    public:
         /// This is the default explicit constructor for objects of this type.
-        explicit sparse_graph(size_type size=0) :
-            _nodes(size)
+        explicit sparse_graph(const size_type& size=0) :
+            nodes_(size)
         {}
 
-        /// Adds a node with given label and value, without any neighbor.
+        /// Adds a node with given label 'x' and value 'v',
+        /// without any neighbours.
         void
         add_node(const label_type& x, const value_type& v) {
-            _nodes[x] = {v, {}};
+            nodes_.insert(
+                std::make_pair(x, std::make_pair(v, adjacency_list_type()))
+            );
         }
 
-        /// Adds an edge between nodes "x" and "y", if it is not there.
+        /// Adds an edge between labelled nodes 'x' and 'y',
+        /// with edge's cost equals to 'c'.
         void
         add_edge(const label_type& x, const label_type& y, const cost_type& c) {
-            _nodes[x].neighbours[y] = {c};
-            _nodes[y].neighbours[x] = {c};  // Second assign for undirected graphs
-        }
+            if (exists(x)) {
+                nodes_[x].second.insert(std::make_pair(y, c));
 
-        /// Returns the current number of nodes in the graph.
-        size_type
-        nodes() const {
-            return _nodes.size();
-        }
-
-        /// Returns the current number of edges in the graph.
-        size_type
-        edges() const {
-            size_type counter = 0;
-            for (auto &n: _nodes)
-                counter += n.second.neighbours.size();
-            return counter;
-        }
-
-        /// Returns the current number of edges from a given node `x`, or
-        /// zero (0) if given node doesn't exists.
-        size_type
-        edges_at(const label_type& x) const {
-            if (_nodes.count(x) == 0)
-                return 0;
-            return _nodes[x].neighbours.size();
+                // This assignment is used in undirected graphs only.
+                if (!exists(y))
+                    add_node(y, nodes_[x].first);
+                nodes_[y].second.insert(std::make_pair(x, c));
+            }
         }
 
         /// Returns `true` if there's a node with given label `x`,
         /// otherwise returns `false`.
         bool
         exists(const label_type& x) const {
-            return _nodes.count(x) > 0;
+            return nodes_.count(x) > 0;
         }
 
-        /// Returns the current value of a given node `x`, or zero (0)
-        /// if `x` doesn't exists.
+        /// Returns the current number of nodes in the graph.
+        size_type
+        nodes() const {
+            return nodes_.size();
+        }
+
+        /// Returns the current number of edges in the graph.
+        size_type
+        edges() const {
+            size_type counter = 0;
+            for (auto &n: nodes_)
+                counter += n.second.second.size();
+            return counter;
+        }
+
+        /// Returns the number of edges from given node `x`, or
+        /// zero (0) if given node doesn't exists.
+        size_type
+        edges_at(const label_type& x) const {
+            if (!exists(x))
+                return 0;
+            return nodes_.at(x).second.size();
+        }
+
+        /// Returns the current value from given node `x`.
         value_type
         value_at(const label_type& x) const {
-            return _nodes.at(x).value;
+            return nodes_.at(x).first;
         }
 
+        /// Returns the cost associated with the edge between the
+        /// nodes `x` and `y`.
+        cost_type
+        cost_at(const label_type& x, const label_type& y) const {
+            return nodes_.at(x).second.at(y);
+        }
+/*
         /// Returns the first node in the graph.
         label_type
         get_first_node() const {
             for (auto &n: _nodes)
                 return n.first;
-        }
-
-        /// Returns the cost associated with given edge.
-        cost_type
-        get_edge_cost(const label_type& x, const label_type& y) const {
-            return _nodes.at(x).neighbours.at(y);
         }
 
         /// Returns a vector with all nodes "y" such that exists an edge (x,y).
@@ -115,20 +122,17 @@ namespace graph {
                 the_neighbours.push_back(it.first);
 
             return the_neighbours;
-        }
+        }*/
 
-    private:
-        // A private type declaration for the adjacency list.
-        typedef typename std::unordered_map<label_type, cost_type> adjacency_list;
+    protected:
+        // A protected type declaration for the adjacency list of a node.
+        typedef typename std::unordered_map<label_type, cost_type> adjacency_list_type;
 
-        // A private type declaration for each node type.
-        struct node_type {
-            value_type value;
-            adjacency_list neighbours;
-        };
+        // A protected type declaration for the type of each node.
+        typedef typename std::pair<value_type, adjacency_list_type> node_type;
 
-        // Internal graph representation as a map of objects of type node.
-        std::unordered_map<label_type, node_type> _nodes;
+        // Internal graph representation as a map from labels to nodes.
+        std::unordered_map<label_type, node_type> nodes_;
     };
 
     /**
@@ -136,7 +140,7 @@ namespace graph {
      * a given graph, which store its results for future uses of them.
      *
      * The class implements the Prim's algorithm.
-     */
+     *
     template <typename Graph>
     class minimum_spanning_tree {
     public:
@@ -188,7 +192,7 @@ namespace graph {
 
             cost_type minimal;
             label_type x, y;
-            
+
             selected.insert(parent.get_first_node());
 
             auto vertices = parent.nodes();
@@ -233,7 +237,7 @@ namespace graph {
     /**
      * An utility operator to print the content of given tree into
      * the given output stream.
-     */
+     * /
     template <typename G>
     std::ostream &
     operator<< (std::ostream& out, const minimum_spanning_tree<G>& the_tree) {
@@ -245,7 +249,7 @@ namespace graph {
         out << ">";
 
         return out;
-    }
+    }*/
 
 } // namespace graph
 
