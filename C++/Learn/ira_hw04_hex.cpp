@@ -22,11 +22,11 @@ main () {
     //game game(DEFAULT_BOARD_SIZE);
     //game.play();
 
-    graph::sparse_graph<int, double, int> g(10);
+    graph::sparse_graph<int, double, double> g(10);
 
-    g.add_node(0, 1.0);
-    g.add_node(1, 2.0);
-    g.add_edge(0, 1, 10);
+    cout << "Adding: " << g.add_node(0, 1.5) << endl;
+    cout << "Adding: " << g.add_node(1, 2.5) << endl;
+    cout << "Adding: " << g.add_edge(0, 1, 10.5) << endl;
 
     cout << "Number of nodes: " << g.nodes() << endl;
     cout << "Number of edges: " << g.edges() << endl;
@@ -34,7 +34,7 @@ main () {
     cout << "Value at 0: " << g.value_at(0) << endl;
     cout << "Edges at 1: " << g.edges_at(1) << endl;
     cout << "Value at 1: " << g.value_at(1) << endl;
-    cout << "Cost from 0 to 1: " << g.cost_at(0, 1) << endl;
+    cout << "Cost between 0 and 1: " << g.cost_between(0, 1) << endl;
 
     return 0;
 }

@@ -15,8 +15,8 @@ namespace graph {
 
     /**
      * A template class to store a sparse undirected graph, with node
-     * labels of type `NodeLabel`, values of type `NodeValue`, and
-     * edge's costs of the type `EdgeCost`.
+     * labels from type `NodeLabel`, values from type `NodeValue`, and
+     * edge's costs from type `EdgeCost`.
      */
     template <typename NodeLabel, typename NodeValue, typename EdgeCost>
     class sparse_graph {
@@ -30,10 +30,9 @@ namespace graph {
         /// A type declaration for the edge's cost type.
         typedef EdgeCost cost_type;
 
-        /// A type declaration for the number of nodes and edges.
+        /// A type declaration for the number of elements.
         typedef typename std::size_t size_type;
 
-    public:
         /// This is the default explicit constructor for objects of this type.
         explicit sparse_graph(const size_type& size=0) :
             nodes_(size)
@@ -41,25 +40,31 @@ namespace graph {
 
         /// Adds a node with given label 'x' and value 'v',
         /// without any neighbours.
-        void
+        bool
         add_node(const label_type& x, const value_type& v) {
-            nodes_.insert(
+            auto results = nodes_.insert(
                 std::make_pair(x, std::make_pair(v, adjacency_list_type()))
             );
+
+            return results.second;
         }
 
         /// Adds an edge between labelled nodes 'x' and 'y',
         /// with edge's cost equals to 'c'.
-        void
+        bool
         add_edge(const label_type& x, const label_type& y, const cost_type& c) {
-            if (exists(x)) {
-                nodes_[x].second.insert(std::make_pair(y, c));
+            if (!exists(x))
+                return false;
 
-                // This assignment is used in undirected graphs only.
-                if (!exists(y))
-                    add_node(y, nodes_[x].first);
-                nodes_[y].second.insert(std::make_pair(x, c));
-            }
+            auto results = nodes_[x].second.insert(std::make_pair(y, c));
+            if (!results.second)
+                return false;
+
+            // Following insert is used on undirected graphs only.
+            if (!exists(y))
+                add_node(y, nodes_[x].first);
+
+            return nodes_[y].second.insert(std::make_pair(x, c)).second;
         }
 
         /// Returns `true` if there's a node with given label `x`,
@@ -102,27 +107,9 @@ namespace graph {
         /// Returns the cost associated with the edge between the
         /// nodes `x` and `y`.
         cost_type
-        cost_at(const label_type& x, const label_type& y) const {
+        cost_between(const label_type& x, const label_type& y) const {
             return nodes_.at(x).second.at(y);
         }
-/*
-        /// Returns the first node in the graph.
-        label_type
-        get_first_node() const {
-            for (auto &n: _nodes)
-                return n.first;
-        }
-
-        /// Returns a vector with all nodes "y" such that exists an edge (x,y).
-        std::vector<label_type>
-        neighbours(const label_type& x) const {
-            std::vector<label_type> the_neighbours;
-
-            for (auto &it: _nodes.at(x)) // Using `at` to get a const iterator.
-                the_neighbours.push_back(it.first);
-
-            return the_neighbours;
-        }*/
 
     protected:
         // A protected type declaration for the adjacency list of a node.
@@ -131,6 +118,7 @@ namespace graph {
         // A protected type declaration for the type of each node.
         typedef typename std::pair<value_type, adjacency_list_type> node_type;
 
+    private:
         // Internal graph representation as a map from labels to nodes.
         std::unordered_map<label_type, node_type> nodes_;
     };
@@ -140,7 +128,7 @@ namespace graph {
      * a given graph, which store its results for future uses of them.
      *
      * The class implements the Prim's algorithm.
-     *
+     */
     template <typename Graph>
     class minimum_spanning_tree {
     public:
