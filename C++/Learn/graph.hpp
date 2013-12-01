@@ -1,5 +1,5 @@
 //
-// graph.hpp: a implementation of the graph adt and some of its algorithms.
+// graph.hpp: an implementation of the graph adt and some of its algorithms.
 //
 
 #ifndef GRAPH_HPP_INCLUDED
@@ -42,11 +42,11 @@ namespace graph {
         /// without any neighbours.
         bool
         add_node(const label_type& x, const value_type& v) {
-            auto results = nodes_.insert(
+            auto rv = nodes_.insert(
                 std::make_pair(x, std::make_pair(v, adjacency_list_type()))
             );
 
-            return results.second;
+            return rv.second;
         }
 
         /// Adds an edge between labelled nodes 'x' and 'y',
@@ -56,8 +56,8 @@ namespace graph {
             if (!exists(x))
                 return false;
 
-            auto results = nodes_[x].second.insert(std::make_pair(y, c));
-            if (!results.second)
+            auto rv = nodes_[x].second.insert(std::make_pair(y, c));
+            if (!rv.second)
                 return false;
 
             // Following insert is used on undirected graphs only.
@@ -111,6 +111,11 @@ namespace graph {
             return nodes_.at(x).second.at(y);
         }
 
+        /// TODO
+        bool
+        minimum_spanning_tree() {
+        }
+
     protected:
         // A protected type declaration for the adjacency list of a node.
         typedef typename std::unordered_map<label_type, cost_type> adjacency_list_type;
@@ -118,17 +123,75 @@ namespace graph {
         // A protected type declaration for the type of each node.
         typedef typename std::pair<value_type, adjacency_list_type> node_type;
 
-    private:
         // Internal graph representation as a map from labels to nodes.
         std::unordered_map<label_type, node_type> nodes_;
     };
+
+    template <typename Graph>
+    Graph
+    minimum_spanning_tree(const Graph& graph) {
+
+        typedef typename Graph::label_type label_type;
+        typedef typename Graph::value_type value_type;
+        typedef typename Graph::cost_type cost_type;
+
+        typedef typename std::set<label_type> label_set;
+
+        Graph rs;
+
+        cost_type minimal;
+
+        label_type x, y;
+        label_set selected;
+
+//        auto minimal_cost = std::numeric_limits<cost_type>::infinity();
+
+        return rs;
+    }
+
+#if 0
+            selected.insert(parent.get_first_node());
+
+            auto vertices = parent.nodes();
+            while (selected.size() < vertices) {
+
+                minimal = std::numeric_limits<cost_type>::infinity();
+                for (const auto& node: selected) {
+                    for (const auto& neighbor: parent.neighbors(node)) {
+
+                        // Checks if neighbor has been selected already
+                        if (selected.count(neighbor) > 0)
+                            continue;
+
+                        // Checks if it's the nearest node right now
+                        auto current = parent.get_edge_cost(node, neighbor);
+                        if (current < minimal) {
+                            minimal = current;
+                            x = node;
+                            y = neighbor;
+                        }
+                    }
+                }
+
+                // Checks if there is any neighbor to add to selected
+                if (minimal == std::numeric_limits<cost_type>::infinity())
+                    return false;
+
+                // Adds selected neighbor and its edge
+                selected.insert(y);
+                edges.push_back({{x, y}, minimal});
+            }
+
+            return true;
+#endif
+
 
     /**
      * A template class to calculate the minimum spanning tree from
      * a given graph, which store its results for future uses of them.
      *
      * The class implements the Prim's algorithm.
-     */
+     *
     template <typename Graph>
     class minimum_spanning_tree {
     public:

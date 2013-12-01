@@ -22,6 +22,8 @@ main () {
     //game game(DEFAULT_BOARD_SIZE);
     //game.play();
 
+    typedef typename graph::sparse_graph<int, double, double> simple_graph;
+
     graph::sparse_graph<int, double, double> g(10);
 
     cout << "Adding: " << g.add_node(0, 1.5) << endl;
@@ -35,6 +37,8 @@ main () {
     cout << "Edges at 1: " << g.edges_at(1) << endl;
     cout << "Value at 1: " << g.value_at(1) << endl;
     cout << "Cost between 0 and 1: " << g.cost_between(0, 1) << endl;
+
+    graph::minimum_spanning_tree<simple_graph>(g);
 
     return 0;
 }
