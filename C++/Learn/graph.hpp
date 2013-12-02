@@ -7,6 +7,9 @@
 
 #include <set>
 #include <limits>
+#include <string>
+#include <utility>
+#include <fstream>
 #include <iostream>
 #include <algorithm>
 #include <unordered_map>
@@ -111,9 +114,91 @@ namespace graph {
             return nodes_.at(x).second.at(y);
         }
 
-        /// TODO
-        bool
+        /// Returns a set with the neighbour's labels from given node `x`.
+        std::set<label_type>
+        neighbours_from(const label_type& x) const {
+            std::set<label_type> neighbours;
+
+            // Tests if there is a node `x` in the graph.
+            if (nodes_.count(x) == 0)
+                return neighbours;
+
+            for (const auto& node: nodes_.at(x).second)
+                neighbours.insert(node.first);
+
+            return neighbours;
+        }
+
+        /// Returns a set with the node's labels from a minimum spanning
+        /// tree calculated using the Prim's algorithm.
+        std::pair<std::set<label_type>, bool>
         minimum_spanning_tree() {
+            cost_type minimal_cost;
+            label_type best_node;
+            label_type best_neighbour;
+            std::set<label_type> selected_nodes;
+
+            // Try to seletec the first node in the graph, if any.
+            for (const auto& node: nodes_) {
+                selected_nodes.insert(node.first);
+                break;
+            }
+
+            // Finds a set of adjacent nodes with minimal cost.
+            while (selected_nodes.size() < nodes_.size()) {
+                minimal_cost = std::numeric_limits<cost_type>::infinity();
+                for (const auto& node: selected_nodes) {
+                    for (const auto& neighbour: neighbours_from(node)) {
+                        // Tests if this neighbour has been selected already
+                        if (selected_nodes.count(neighbour) > 0)
+                            continue;
+
+                        // Tests if it's the nearest node right now
+                        cost_type current_cost = cost_between(node, neighbour);
+                        if (current_cost < minimal_cost) {
+                            minimal_cost = current_cost;
+                            best_node = node;
+                            best_neighbour = neighbour;
+                        }
+                    }
+                }
+
+                // Tests if we found a better neighbour
+                if (minimal_cost == std::numeric_limits<cost_type>::infinity())
+                    return std::make_pair(selected_nodes, false);
+
+                // Adds the best neighbour to the set of selected node.
+                selected_nodes.insert(best_neighbour);
+            }
+
+            // A solution has been found, returning it!
+            return std::make_pair(selected_nodes, selected_nodes.size() == nodes_.size());
+        }
+
+        /// Loads the graph from a file with given name.
+        bool
+        load_from_file(const std::string& filename) {
+            label_type x, y;
+            cost_type cost;
+            size_type nodes;
+
+            std::ifstream input(filename, std::ios::in);
+            if (!input.good() || input.eof())
+                return false;
+
+            input >> nodes;
+            while (!input.eof()) {
+                input >> x >> y >> cost;
+                std::cout << x << "x" << y << ": " << cost << std::endl;
+
+                add_node(x, std::numeric_limits<cost_type>::infinity());
+                add_node(y, std::numeric_limits<cost_type>::infinity());
+
+                add_edge(x, y, cost);
+            }
+            input.close();
+
+            return true;
         }
 
     protected:
@@ -126,181 +211,6 @@ namespace graph {
         // Internal graph representation as a map from labels to nodes.
         std::unordered_map<label_type, node_type> nodes_;
     };
-
-    template <typename Graph>
-    Graph
-    minimum_spanning_tree(const Graph& graph) {
-
-        typedef typename Graph::label_type label_type;
-        typedef typename Graph::value_type value_type;
-        typedef typename Graph::cost_type cost_type;
-
-        typedef typename std::set<label_type> label_set;
-
-        Graph rs;
-
-        cost_type minimal;
-
-        label_type x, y;
-        label_set selected;
-
-//        auto minimal_cost = std::numeric_limits<cost_type>::infinity();
-
-        return rs;
-    }
-
-#if 0
-            selected.insert(parent.get_first_node());
-
-            auto vertices = parent.nodes();
-            while (selected.size() < vertices) {
-
-                minimal = std::numeric_limits<cost_type>::infinity();
-                for (const auto& node: selected) {
-                    for (const auto& neighbor: parent.neighbors(node)) {
-
-                        // Checks if neighbor has been selected already
-                        if (selected.count(neighbor) > 0)
-                            continue;
-
-                        // Checks if it's the nearest node right now
-                        auto current = parent.get_edge_cost(node, neighbor);
-                        if (current < minimal) {
-                            minimal = current;
-                            x = node;
-                            y = neighbor;
-                        }
-                    }
-                }
-
-                // Checks if there is any neighbor to add to selected
-                if (minimal == std::numeric_limits<cost_type>::infinity())
-                    return false;
-
-                // Adds selected neighbor and its edge
-                selected.insert(y);
-                edges.push_back({{x, y}, minimal});
-            }
-
-            return true;
-#endif
-
-
-    /**
-     * A template class to calculate the minimum spanning tree from
-     * a given graph, which store its results for future uses of them.
-     *
-     * The class implements the Prim's algorithm.
-     *
-    template <typename Graph>
-    class minimum_spanning_tree {
-    public:
-        /// A type declaration for the graph ADT.
-        typedef Graph graph_type;
-
-        /// A type declaration for the node's label type.
-        typedef typename Graph::label_type label_type;
-
-        /// A type declaration for the edge's cost type.
-        typedef typename Graph::cost_type cost_type;
-
-        /// A type declaration for an edge between two nodes with
-        /// a given cost value.
-        typedef std::pair<std::pair<label_type, label_type>, cost_type> edge_type;
-
-        /// A type declaration to store a minimum spanning tree.
-        typedef std::vector<edge_type> edges_type;
-
-
-        /// Constructs an instance of the class with the given graph
-        /// reference used as its parent graph.
-        minimum_spanning_tree(const graph_type& parent) :
-            edges(0)
-        {
-            calculate_by_prim(parent);
-        }
-
-        /// Returns the total cost from the calculated spanning tree.
-        cost_type
-        total_cost() const {
-            cost_type accum = 0;
-
-            for (const auto& edge: edges)
-                accum += edge.second;
-
-            return accum;
-        }
-
-    private:
-        /// Stores the resulting tree calculated from the given graph.
-        edges_type edges;
-
-        /// Implements the Prim's algorithm to find the minimum spanning
-        /// tree from the given parent graph.
-        bool
-        calculate_by_prim(const graph_type& parent) {
-            std::set<label_type> selected;
-
-            cost_type minimal;
-            label_type x, y;
-
-            selected.insert(parent.get_first_node());
-
-            auto vertices = parent.nodes();
-            while (selected.size() < vertices) {
-
-                minimal = std::numeric_limits<cost_type>::infinity();
-                for (const auto& node: selected) {
-                    for (const auto& neighbor: parent.neighbors(node)) {
-
-                        // Checks if neighbor has been selected already
-                        if (selected.count(neighbor) > 0)
-                            continue;
-
-                        // Checks if it's the nearest node right now
-                        auto current = parent.get_edge_cost(node, neighbor);
-                        if (current < minimal) {
-                            minimal = current;
-                            x = node;
-                            y = neighbor;
-                        }
-                    }
-                }
-
-                // Checks if there is any neighbor to add to selected
-                if (minimal == std::numeric_limits<cost_type>::infinity())
-                    return false;
-
-                // Adds selected neighbor and its edge
-                selected.insert(y);
-                edges.push_back({{x, y}, minimal});
-            }
-
-            return true;
-        }
-
-        /// A `friend` declaration to implement a tree extractor (`<<`).
-        template <typename G>
-        friend std::ostream &
-        operator<< (std::ostream& out, const minimum_spanning_tree<G>& tree);
-    };
-
-    /**
-     * An utility operator to print the content of given tree into
-     * the given output stream.
-     * /
-    template <typename G>
-    std::ostream &
-    operator<< (std::ostream& out, const minimum_spanning_tree<G>& the_tree) {
-        out << "MST<" << std::endl;
-        for (const auto& edge: the_tree.edges) {
-            out << " (" << edge.first.first << ", " << edge.first.second
-                << ") = " << edge.second << std::endl;
-        }
-        out << ">";
-
-        return out;
-    }*/
 
 } // namespace graph
 

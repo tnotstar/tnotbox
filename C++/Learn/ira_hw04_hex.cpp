@@ -22,13 +22,18 @@ main () {
     //game game(DEFAULT_BOARD_SIZE);
     //game.play();
 
-    typedef typename graph::sparse_graph<int, double, double> simple_graph;
+    graph::sparse_graph<int, double, double> g(20);
 
-    graph::sparse_graph<int, double, double> g(10);
-
+#if 0
     cout << "Adding: " << g.add_node(0, 1.5) << endl;
     cout << "Adding: " << g.add_node(1, 2.5) << endl;
     cout << "Adding: " << g.add_edge(0, 1, 10.5) << endl;
+#endif
+
+    if (g.load_from_file("ira_hw04_mst.dat"))
+        cout << "Data loaded!" << endl;
+    else
+        cout << "Oops! Something's wrong!" << endl;
 
     cout << "Number of nodes: " << g.nodes() << endl;
     cout << "Number of edges: " << g.edges() << endl;
@@ -38,7 +43,13 @@ main () {
     cout << "Value at 1: " << g.value_at(1) << endl;
     cout << "Cost between 0 and 1: " << g.cost_between(0, 1) << endl;
 
-    graph::minimum_spanning_tree<simple_graph>(g);
+    auto mst = g.minimum_spanning_tree();
+    if (mst.second) {
+        cout << "MST: ";
+        for (const auto& node: mst.first)
+            cout << node << ", ";
+        cout << endl;
+    }
 
     return 0;
 }
