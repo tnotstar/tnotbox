@@ -22,8 +22,8 @@ namespace graph {
      * edge's costs from type `EdgeCost`.
      */
     template <typename NodeLabel, typename NodeValue, typename EdgeCost>
-    class sparse_graph {
-    public:
+    struct sparse_graph {
+
         /// A type declaration for the node's label type.
         typedef NodeLabel label_type;
 
@@ -33,7 +33,7 @@ namespace graph {
         /// A type declaration for the edge's cost type.
         typedef EdgeCost cost_type;
 
-        /// A type declaration for the number of elements.
+        /// A type declaration for the number of elements (nodes and edges).
         typedef typename std::size_t size_type;
 
         /// This is the default explicit constructor for objects of this type.
@@ -45,11 +45,11 @@ namespace graph {
         /// without any neighbours.
         bool
         add_node(const label_type& x, const value_type& v) {
-            auto rv = nodes_.insert(
+            auto result = nodes_.insert(
                 std::make_pair(x, std::make_pair(v, adjacency_list_type()))
             );
 
-            return rv.second;
+            return result.second;
         }
 
         /// Adds an edge between labelled nodes 'x' and 'y',
@@ -59,13 +59,15 @@ namespace graph {
             if (!exists(x))
                 return false;
 
-            auto rv = nodes_[x].second.insert(std::make_pair(y, c));
-            if (!rv.second)
+            auto result = nodes_[x].second.insert(std::make_pair(y, c));
+            if (!result.second)
                 return false;
 
             // Following insert is used on undirected graphs only.
-            if (!exists(y))
-                add_node(y, nodes_[x].first);
+            if (!exists(y)) {
+                if (!add_node(y, nodes_[x].first))
+                    return false;
+            }
 
             return nodes_[y].second.insert(std::make_pair(x, c)).second;
         }
@@ -108,7 +110,7 @@ namespace graph {
         }
 
         /// Returns the cost associated with the edge between the
-        /// nodes `x` and `y`.
+        /// nodes labelled `x` and `y`.
         cost_type
         cost_between(const label_type& x, const label_type& y) const {
             return nodes_.at(x).second.at(y);
@@ -129,6 +131,7 @@ namespace graph {
             return neighbours;
         }
 
+#if 0
         /// Returns a set with the node's labels from a minimum spanning
         /// tree calculated using the Prim's algorithm.
         std::pair<std::set<label_type>, bool>
@@ -200,6 +203,7 @@ namespace graph {
 
             return true;
         }
+#endif // 0
 
     protected:
         // A protected type declaration for the adjacency list of a node.
