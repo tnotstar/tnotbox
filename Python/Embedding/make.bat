@@ -1,0 +1,1 @@
+@gcc -IC:\Library\Python2\include -LC:\Library\Python2\libs -o hello hello.c -lpython27
