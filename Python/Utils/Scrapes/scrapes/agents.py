@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2014 Antonio Alvarado Hernández
+# Copyright (c) 2014, Antonio Alvarado Hernández and contributors
+# All rights reserved
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -16,27 +17,30 @@
 #
 
 
-from __future__ import absolute_import, unicode_literals
 
 from requests import Session
 
 
-class Itzamna(object):
+class BaseAgent(object):
     """Blah, blah, blah, ..."""
 
-    def __init__(self, config=None):
-        self._config = config
+    def __init__(self):
         self._session = Session()
 
     @property
-    def config(self):
-        return self._config
+    def session(self):
+        return self._session
+
+
+class WebAgent(BaseAgent):
+    """Blah, blah, blah, ..."""
 
     def get(self, url):
         """Blah, blah, blah, ..."""
         try:
-            response = self._session.get(url)
-            print response
+            response = self.session.get(url)
+            print response.status_code
+            print response.text
         except Exception as ex:
             print "oops", str(ex)
 

@@ -1,8 +1,8 @@
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 #
 # Copyright (c) 2014, Antonio Alvarado Hernández and contributors
 # All rights reserved
-#
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -16,5 +16,11 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+
+
+if __name__ == '__main__':
+    import sys
+    import nose
+    nose.main(argv=sys.argv)
 
 # EOF

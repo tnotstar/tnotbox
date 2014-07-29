@@ -5,8 +5,11 @@ syntax: glob
 **/debug/**
 **/build/**
 **/release/**
+**/docs/_build/**
 **/__pycache__
 **/*.py[cod]
+**/*~
+**/*swp
 **/*.p
 **/*.pdf
 **/*.pro.user
