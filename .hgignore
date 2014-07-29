@@ -10,6 +10,7 @@ syntax: glob
 **/*.py[cod]
 **/*~
 **/*swp
+**/*.o
 **/*.p
 **/*.pdf
 **/*.pro.user
