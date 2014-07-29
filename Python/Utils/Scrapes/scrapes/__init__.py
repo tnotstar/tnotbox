@@ -21,6 +21,6 @@
 from scrapes.agents import WebAgent
 
 
-__all__ = "ItzamnaAgent"
+__all__ = "WebAgent"
 
 # EOF
