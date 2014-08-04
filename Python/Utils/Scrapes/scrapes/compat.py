@@ -21,7 +21,11 @@
 from __future__ import absolute_import, unicode_literals
 
 from six import (PY2, PY3)
-from six.moves.BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
+from six.moves import BaseHTTPServer
+
+
+
+__all__ = ['BaseClass', 'BaseHTTPServer']
 
 
 class BaseClass(object):
@@ -35,10 +39,5 @@ class BaseClass(object):
             return result.encode('utf-8')
 
 
-__all__ = [
-    'BaseClass',
-    'BaseHTTPRequestHandler',
-    'HTTPServer',
-]
 
 # EOF

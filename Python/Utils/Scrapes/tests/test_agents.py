@@ -24,60 +24,78 @@ import unittest
 import threading
 
 from scrapes import WebAgent
-from scrapes.compat import BaseClass, HTTPServer, BaseHTTPRequestHandler
+from scrapes.compat import BaseHTTPServer as httpsrv
 
 
-class FakeRequestHandler(BaseHTTPRequestHandler, BaseClass):
-    """Blah, blah, blah, ...
 
-    Original code borrowed from https://code.google.com/p/feedparser/
-    """
+class MockWebServer(object):
+    """Blah, blah, blah, ..."""
 
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header("Content-type", "text/plain")
-        self.end_headers()
-        self.wfile.write("Hello, world!\n")
+    class RequestHandler(httpsrv.BaseHTTPRequestHandler):
+        """Blah, blah, blah, ..."""
 
+        server_version = "MockWebServer/0.1"
 
-class FakeHTTPServer(threading.Thread, BaseClass):
-    """Blah, blah, blah, ...
+        def do_GET(self):
+            """Blah, blah, blah, ..."""
+            if self.path in self.server.requests_map:
+                response = self.server.requests_map.get(self.path)
+                mimetype = response.get("mimetype")
+                content = response.get("content")
+                length = len(content)
+                self.send_response(200)
+                self.send_header("Content-Type", mimetype)
+                self.send_header("Content-Length", str(length))
+                self.end_headers()
+                self.wfile.write(content)
+            else:
+                self.send_response(500)
+                self.end_headers()
 
-    Original code borrowed from https://code.google.com/p/feedparser/
-    """
+    def __init__(self, requests_map, server_host=None, server_port=9999):
+        """Blah, blah, blah, ..."""
+        server_address = (server_host or "", server_port)
+        request_handler = self.RequestHandler
+        self._server = httpsrv.HTTPServer(server_address, request_handler)
+        self._server.requests_map = requests_map
+        self._thread = threading.Thread(target=self._run_server)
 
-    def __init__(self, requests=1):
-        super(FakeHTTPServer, self).__init__()
-        self._requests = requests
-        self._server = HTTPServer(("localhost", 9999), FakeRequestHandler)
-        self._ready = threading.Event()
+    def _run_server(self, *args, **kwargs):
+        """Blah, blah, blah, ..."""
+        print("Now, server is running...")
+        self._server.serve_forever()
+        print("Now, server is shutting down...")
 
-    def run(self):
-        print "Setting ready event..."
-        self._ready.set()
-        while self._requests:
-            print "Serving a requets..."
-            self._server.handle_request()
-            self._requests -= 1
-            print "Nr. requests after decrement: ", self._requests
-        print "Clearing ready event..."
-        self._ready.clear()
+    def start(self):
+        """Blah, blah, blah, ..."""
+        self._thread.start()
+
+    def stop(self):
+        """Blah, blah, blah, ..."""
+        self._server.shutdown()
+        self._thread.join()
 
 
 class TestWebAgent(unittest.TestCase):
     """Blah, blah, blah, ..."""
 
+    requests_map = {
+        "/": {"mimetype": "text/plain",
+              "content":  "Hello, world!"},
+    }
+
     def setUp(self):
         print "setting up..."
-        self._websrv = FakeHTTPServer()
+        self._websrv = MockWebServer(self.requests_map, "localhost", 9999)
         self._websrv.start()
 
     def tearDown(self):
         print "tearing down..."
-        #self._websrv._ready.wait()
+        self._websrv.stop()
+        print "finished!"
 
     def test_example(self):
         agent = WebAgent()
-        agent.get("http://localhost:9999")
+        agent.get("http://localhost:9999/")
 
 # EOF
