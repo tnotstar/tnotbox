@@ -1,4 +1,4 @@
-/* printf.go */
+/* 02_printf.go */
 
 package main
 

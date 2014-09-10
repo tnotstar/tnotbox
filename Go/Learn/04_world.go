@@ -1,4 +1,4 @@
-/* world.go */
+/* 04_world.go */
 
 package main
 
