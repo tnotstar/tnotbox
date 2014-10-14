@@ -4,13 +4,17 @@
 from tkinter import *
 from tkinter import ttk
 
-class EnameFrame(ttk.Frame):
-    """This is the program's main frame."""
+
+
+
+class EnameMainWindow(ttk.Frame):
+    """This is the program's main window.
+    """
 
     def __init__(self, root=None):
         """Initializes given frame instance."""
-        # Blah, blah, blah, ...
-        super(EnameFrame, self).__init__(master=root, borderwidth=3, relief=SUNKEN)
+        super().__init__(master=root, borderwidth=3, relief=SUNKEN)
+        root.title("Enamer v{major}.{minor}")
         # Blah, blah, blah, ...
         root.title("Hello, world!")
         # Blah, blah, blah, ...
@@ -55,15 +59,10 @@ class EnameFrame(ttk.Frame):
         naming_entry.grid(row=0, column=0)
 
 
-
-
-
-
-
 def main():
     """This is the program's entry-point."""
     root = Tk()
-    main = EnameFrame(root)
+    main = EnameMainWindow(root)
     root.mainloop()
 
 if __name__ == '__main__':
