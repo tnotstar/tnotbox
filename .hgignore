@@ -1,0 +1,20 @@
+# .hgignore - to exclude temporary files
+
+syntax: glob
+
+**/debug/**
+**/build/**
+**/release/**
+**/docs/_build/**
+**/__pycache__
+**/*.py[cod]
+**/*~
+**/*swp
+**/*.o
+**/*.p
+**/*.pdf
+**/*.pro.user
+**/*.depend
+**/*.layout
+
+# EOF

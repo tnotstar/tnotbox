@@ -1,0 +1,6 @@
+% this \LaTeX code initializes the TikZ package
+
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+
+% EOF
