@@ -1,32 +1,19 @@
-var abc = 1;
+#!/bin/sh
+':' //; exec `command -v nodejs || command -v node || command -v js` "$0" "$@"
 
-function foo () {
-    function baz() {
-        console.log(abc);
-    }
-    console.log(abc);
-    baz();
-}
-
-function bar () {
-    function baz() {
-        console.log(this);
-    }
-    console.log(this);
-    baz();
-}
-
-foo();
-bar();
-
-var Proxymier = function (options) {
+var ctor = function (options) {
 
     if (!options)
         throw new Error("Missing 'options' value");
 
     var self = this;
-
     self.options = options;
+
+    console.log("> ctor(options): self = ", self, "!");
 }
 
-var p =
+ctor({name: "John Doe"});
+
+var object = new ctor({name: "John Doe"});
+
+// EOF

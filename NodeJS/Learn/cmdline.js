@@ -1,10 +1,10 @@
-#!/usr/bin/env node
+#!/bin/sh
+':' //; exec `command -v nodejs || command -v node || command -v js` "$0" "$@"
 
 if (process.argv.length < 3) {
-    console.error("invalid command line arguments");
-    console.debug("Number of arguments:", process.argv.length);
-    console.debug("Argument values:", process.argv);
-    console.log("usage: node cmdline.js <message>");
+    console.error("Number of arguments:", process.argv.length);
+    console.error("Argument values:", process.argv);
+    console.error("usage: ", process.argv[0], process.argv[1], "<message>");
     process.exit(1);
 }
 
