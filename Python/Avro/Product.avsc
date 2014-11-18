@@ -1,0 +1,10 @@
+
+{ "namespace": "funnyco",
+  "name": "product",
+  "type": "record",
+  "fields": [
+    { "name": "id", "type": "string" },
+    { "name": "description", "type": "string" }
+  ]
+}
+
