@@ -13,7 +13,18 @@ from avro.datafile import DataFileReader, DataFileWriter
 import avro.schema
 
 
-schema = avro.schema.parse(open("User.avsc").read())
+schema = avro.schema.parse("""
+    {
+        "namespace": "examples",
+        "type":      "record",
+        "name":      "User",
+        "fields":    [
+          { "name": "name",  "type": "string" },
+          { "name": "favorite_number", "type": ["int", "null"] },
+          { "name": "favorite_color", "type": ["string", "null"] }
+        ]
+    }
+    """)
 
 writer = DataFileWriter(open("users-data.avro", "w"), DatumWriter(), schema)
 writer.append(dict(name="Alyssa", favorite_number=256))
