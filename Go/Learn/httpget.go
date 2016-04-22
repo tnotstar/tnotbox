@@ -1,4 +1,4 @@
-/* fetch.go */
+/* httpget.go */
 
 package main
 
