@@ -1,4 +1,19 @@
 #!/usr/bin/env python3
+#
+# Copyright (c) 2018 Antonio Alvarado Hernández - All rights reserved
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 # -*- coding: utf-8 -*-
 
 import os
@@ -13,16 +28,8 @@ class Shell(object):
 
     def __init__(self, stdin=None, stdout=None):
         """Initialize given shell instance."""
-        if stdin is not None:
-            self.stdin = stdin
-        else:
-            self.stdin = sys.stdin
-
-        if stdout is not None:
-            self.stdout = stdout
-        else:
-            self.stdout = sys.stdout
-
+        self._stdin = stdin or sys.stdin
+        self._stdout = stdout or sys.stdout
         self._builtins = self._make_builtins()
 
     def run(self):
@@ -33,22 +40,16 @@ class Shell(object):
         print("----------------")
         print("> Finished!")
 
-    def _make_builtins(self, which=None):
+    def _make_builtins(self, which=__name__):
         """Make a list with internal commands."""
-
         def iscommand(what):
             if not inspect.isclass(what):
                 return False
             return issubclass(what, Command) and what != Command
-
-        return dict(
-            [(cls.cmdname(), cls) for _, cls in
-                inspect.getmembers(
-                        sys.modules[which or __name__],
-                        iscommand
-                )
-            ]
-        )
+        return dict([
+            (cls.cmdname(), cls) for _, cls in
+                    inspect.getmembers(sys.modules[which], iscommand)
+        ])
 
 class Command(object):
     """A base class to implement commands."""
