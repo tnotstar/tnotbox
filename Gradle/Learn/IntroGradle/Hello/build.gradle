@@ -1,5 +1,7 @@
+//
 
 task helloWorld << {
     println "Hello, world!"
 }
 
+// EOF
