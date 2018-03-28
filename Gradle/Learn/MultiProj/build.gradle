@@ -1,0 +1,11 @@
+// Stolen from: https://docs.gradle.org/current/userguide/multi_project_builds.html
+
+Closure c = {
+    task -> println "Hello, I'm $task.project.name!"
+}
+
+task('hello').doLast(c)
+
+project(':bluewhale') {
+    task('hello').doLast(c)
+}
