@@ -1,0 +1,1 @@
+print("Now I will make an expression:", 3**2 + 4**2)
