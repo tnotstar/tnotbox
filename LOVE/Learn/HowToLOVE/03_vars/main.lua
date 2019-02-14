@@ -6,13 +6,14 @@ print(C)
 
 var_123 = 123
 
-sheap = 10
-SHEAP = 20
+sheep = 10
+SHEEP = 20
 
-print(sheap)
-print(SHEAP)
+print(sheep)
+print(SHEEP)
 
 print("Hello, world!")
+print("Hello," .. " world!")
 
 animal = "sheep"
 name = "antonio"
