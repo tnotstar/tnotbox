@@ -1,0 +1,68 @@
+{
+    "queues": [
+        {
+            "name": "Moda y accesorios",
+            "w_score": 0.9
+        },
+        {
+            "name": "Informática y electrónica",
+            "w_score": 0.5
+        },
+        {
+            "name": "Electrodomésticos",
+            "w_score": 0.3
+        }
+    ],
+    "workers": [
+        {
+            "name": "Pepe",
+            "p_score": 0.1
+        },
+        {
+            "name": "José",
+            "p_score": 0.2
+        },
+        {
+            "name": "Joe",
+            "p_score": 0.3
+        },
+        {
+            "name": "Paco",
+            "p_score": 0.4
+        },
+        {
+            "name": "Panchito",
+            "p_score": 0.5
+        },
+        {
+            "name": "Antonico",
+            "p_score": 0.5
+        },
+        {
+            "name": "Toñito",
+            "p_score": 0.6
+        },
+        {
+            "name": "Tony",
+            "p_score": 0.6
+        },
+        {
+            "name": "Juan",
+            "p_score": 0.7
+        },
+        {
+            "name": "Joan",
+            "p_score": 0.7
+        },
+        {
+            "name": "John",
+            "p_score": 0.8
+        },
+        {
+            "name": "Jhonny",
+            "p_score": 0.9
+        }
+    ],
+    "assignments": [
+    ]
+}
