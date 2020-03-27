@@ -10,6 +10,8 @@ function love.load()
 	y = 20
 	gold = "100"
 
+	love.keyboard.setKeyRepeat(true)
+
 	print("Loaded!")
 end
 
@@ -34,8 +36,9 @@ function love.resize(w, h)
 		", new window height: " .. h .. "!")
 end
 
-function love.keypressed(key)
-	print("Key: " .. key .. "!")
+function love.keypressed(key, scancode, isrepeat)
+	print("Key: " .. key .. " scancode: " .. scancode ..
+		", is repeated? " .. tostring(isrepeat))
 end
 
 function love.keyreleased(key)
