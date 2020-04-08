@@ -1,3 +1,4 @@
+//usr/bin/env go run "$0" "$@"; exit "$?"
 // -*- coding: utf-8 -*-
 //
 // Copyright (c) 2019-2020 Antonio Alvarado Hernández
@@ -18,19 +19,23 @@
 package main
 
 import (
+    "os"
     "fmt"
-
-    "github.com/danieljoos/wincred"
+    "github.com/pkg/errors"
 )
+
+func raiseAnError() error {
+    _, err := os.Open("this file won't find")
+    if err != nil {
+        return errors.Wrap(err, "Oops this file hasn't found")
+    }
+    return nil
+}
 
 func main() {
     fmt.Println("Beginning...")
-    cred := wincred.NewGenericCredential("Test-Application")
-    cred.CredentialBlob = []byte("This is my secret password!!")
-    err := cred.Write()
-    if err != nil {
-        fmt.Println(err)
-    }
+    err := raiseAnError()
+    fmt.Println(">", err)
     fmt.Println("Finished!")
 }
 

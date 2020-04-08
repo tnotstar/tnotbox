@@ -1,6 +1,6 @@
 // -*- coding: utf-8 -*-
 //
-// Copyright (c) 2019-2020 Antonio Alvarado Hernández
+// Copyright (c) 2016-2020 Antonio Alvarado Hernández
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -17,21 +17,13 @@
 
 package main
 
-import (
-    "fmt"
-
-    "github.com/danieljoos/wincred"
-)
+import "fmt"
+import "github.com/gonum/blas/blas64"
 
 func main() {
-    fmt.Println("Beginning...")
-    cred := wincred.NewGenericCredential("Test-Application")
-    cred.CredentialBlob = []byte("This is my secret password!!")
-    err := cred.Write()
-    if err != nil {
-        fmt.Println(err)
-    }
-    fmt.Println("Finished!")
+
+    v := blas64.Vector{Inc: 1, Data: []float64{1, 1, 1}}
+    fmt.Println("v has length:", blas64.Nrm2(len(v.Data), v))
 }
 
 // EOF
