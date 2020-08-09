@@ -6,16 +6,17 @@ const Token = (type, value=null) => {
 }
 
 const ReservedTokens = {
-    '"':    Token("symbol", '"'),
-    "'":    Token("symbol", "'"),
-    ".":    Token("symbol", "."),
-    ",":    Token("symbol", ","),
-    ";":    Token("symbol", ";"),
-    nil:    Token("nil"),
-    ident:  Token("symbol"),
-    AS:     Token("symbol", "as"),
-    SELECT: Token("symbol", "select"),
-    FROM:   Token("symbol", "from")
+    ".":      Token("Operator", "."),
+    ",":      Token("Operator", ","),
+    ";":      Token("Operator", ";"),
+    __EOF:    Token("Eof"),
+    __NAME:   Token("Name"),
+    __STRING: Token("String"),
+    __NUMBER: Token("Number"),
+    as:       Token("Symbol", "AS"),
+    select:   Token("Symbol", "SELECT"),
+    from:     Token("Symbol", "FROM"),
+    where:    Token("Symbol", "WHERE"),
 }
 
 const StatementParser = class {
@@ -23,10 +24,16 @@ const StatementParser = class {
     parse(statement) {
         this.reset(statement)
         let token = this.nextToken()
-        while (token !== ReservedTokens.nil) {
+        while (token !== ReservedTokens.eof) {
             console.log(token)
             token = this.nextToken()
         }
+    }
+
+    accept() {
+    }
+
+    expect() {
     }
 
     reset(statement) {
@@ -41,15 +48,6 @@ const StatementParser = class {
             chr = this.nextChar()
         }
 
-        if (this.isNumber(chr)) {
-            let buffer = []
-            while (this.isNumber(chr)) {
-                buffer.push(chr)
-                chr = this.nextChar()
-            }
-            return Token("number", Number(buffer.join("")))
-        }
-
         if (this.IsPunctuation(chr)) {
             let buffer = []
             while (this.IsPunctuation(chr)) {
@@ -61,19 +59,54 @@ const StatementParser = class {
                 return ReservedTokens[key]
         }
 
-        if (this.isIdentifier(chr)) {
+        if (this.isNumberStart(chr)) {
             let buffer = []
-            while (this.isIdentifier(chr)) {
+            while (this.isNumberPart(chr)) {
                 buffer.push(chr)
                 chr = this.nextChar()
             }
-            let key = buffer.join("")
+            return Token("Number", Number(buffer.join("")))
+        }
+
+        if (this.isIdentifierStart(chr)) {
+            let buffer = []
+            while (this.isIdentifierPart(chr)) {
+                buffer.push(chr)
+                chr = this.nextChar()
+            }
+            let value = buffer.join("")
+            let key = value.toLowerCase()
             if (key in ReservedTokens)
                 return ReservedTokens[key]
             else
-                return Token("ident", key)
+                return Token("Name", value)
         }
-        return ReservedTokens.nil
+
+        if (chr === '"') {
+            let buffer = []
+            do {
+                chr = this.nextChar()
+                if (chr !== '"')
+                    buffer.push(chr)
+            } while (chr !== '"' && chr !== null)
+            if (chr === '"')
+                chr = this.nextChar()
+            return Token("Name", buffer.join(""))
+        }
+
+        if (chr === "'") {
+            let buffer = []
+            do {
+                chr = this.nextChar()
+                if (chr !== "'")
+                    buffer.push(chr)
+            } while (chr !== "'" && chr !== null)
+            if (chr === "'")
+                chr = this.nextChar()
+            return Token("String", buffer.join(""))
+        }
+
+        return ReservedTokens.eof
     }
 
     firstChar() {
@@ -92,20 +125,29 @@ const StatementParser = class {
         return [" ", "\t", "\r", "\n"].includes(chr)
     }
 
-    isNumber(chr) {
-        return '0' <= chr && chr <= '9'
-    }
-
     IsPunctuation(chr) {
-        return [",", "'", '"'].includes(chr)
+        return [".", ",", ";"].includes(chr)
     }
 
-    isIdentifier(chr) {
-        return ('A' <= chr && chr <= 'Z') ||
-                ('a' <= chr && chr <= 'z') ||
-                (chr === '_')
+    isNumberStart(chr) {
+        return (chr !== null) && ("0" <= chr) && (chr <= "9")
+    }
+
+    isNumberPart(chr) {
+        return this.isNumberStart(chr) || [".", "e", "E"].includes(chr)
+    }
+
+    isIdentifierStart(chr) {
+        return (chr !== null) && (('A' <= chr && chr <= 'Z') ||
+                ('a' <= chr && chr <= 'z') || (chr === '_'))
+    }
+
+    isIdentifierPart(chr) {
+        return this.isIdentifierStart(chr) || this.isNumberStart(chr)
     }
 }
 
 let parser = new StatementParser()
 parser.parse("SELECT 'Hello, world!'")
+parser.parse("SELECT name FROM customer")
+parser.parse("SELECT c.name FROM customer AS c")
