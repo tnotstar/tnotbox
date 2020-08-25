@@ -1,0 +1,25 @@
+[package]
+name = "hello"
+version = "0.1.0"
+authors = ["Antonio Alvarado Hernández <tnotstar@gmail.com>"]
+edition = "2018"
+
+[[bin]]
+name = "hello"
+path = "src/hello.rs"
+
+[[bin]]
+name = "comments_1"
+path = "src/comments_1.rs"
+
+[[bin]]
+name = "comments_2"
+path = "src/comments_2.rs"
+
+[[bin]]
+name = "comments_3"
+path = "src/comments_3.rs"
+
+[[bin]]
+name = "activity"
+path = "src/activity.rs"
