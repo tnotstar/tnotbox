@@ -1,0 +1,1 @@
+@call uvicorn hello:app
