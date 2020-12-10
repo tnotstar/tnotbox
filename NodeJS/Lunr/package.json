@@ -1,0 +1,12 @@
+{
+  "name": "lunrita",
+  "version": "0.1.0",
+  "description": "Just a bunch of simple lunr examples",
+  "license": "ISC",
+  "scripts": {
+    "example-1": "node example-1.js"
+  },
+  "dependencies": {
+    "lunr": "^2.3.9"
+  }
+}
