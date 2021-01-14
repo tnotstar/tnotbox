@@ -1,0 +1,44 @@
+<html>
+<head>
+<style>
+body {
+  background-color: white;
+}
+.slidercont {
+  width: 100px;
+  border: 1px solid;
+  padding: 10px 15px 10px 15px;
+  background-color: white;
+}
+.slider {
+  width: 100%;
+}
+</style>
+</head>
+<body>
+<form class="slidercont">
+  <label for="rSlider">Rojo:</label><br>
+  <input id="rSlider" class="slider" type="range" min="0" max="255" value="0"/><br>
+  <label for="gSlider">Verde:</label><br>
+  <input id="gSlider" class="slider" type="range" min="0" max="255" value="0"/><br>
+  <label for="bSlider">Azul:</label><br>
+  <input id="bSlider" class="slider" type="range" min="0" max="255" value="0"/>
+</form>
+<ul id="valuesList"></ul>
+<script>
+window.onload = function() {
+  const sliders = ['rSlider', 'gSlider', 'bSlider'].map((id) => {
+    return document.getElementById(id)
+  })
+  sliders.forEach((element) => {
+    element.oninput = function() {
+      const value = sliders.map((element) => {
+        return parseInt(element.value).toString(16).padStart(2, '0')
+      }).join('')
+      document.body.style.backgroundColor = value
+    }
+  })
+}
+</script>
+</body>
+</html>
