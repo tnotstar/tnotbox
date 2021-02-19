@@ -1,0 +1,7 @@
+# Copyright (c) 2021 Antonio Alvarado Hernández
+
+/.ipynb_checkpoints/
+
+*.csv
+
+# EOF
