@@ -1,17 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from pikepdf import Pdf, Page
+from pikepdf import Name, open as open_pdf
 from argparse import ArgumentParser
 
 def get_pages_dimensions(input_filename):
-    with Pdf.open(input_filename) as pdf:
-        all_dimensions = set()
+    with open_pdf(input_filename) as pdf:
+        all_dimensions = dict()
+        index = 0
         for page in pdf.pages:
-            mediabox = tuple(Page(page).mediabox)
-            width = mediabox[2] - mediabox[0]
-            height = mediabox[3] - mediabox[1]
-            all_dimensions.add((width, height))
+            if not Name.MediaBox in page:
+                continue
+            mediabox = tuple(page.MediaBox)
+            width = round(2.54*float(mediabox[2] - mediabox[0])/72, 2)
+            height = round(2.54*float(mediabox[3] - mediabox[1])/72, 2)
+            index += 1
+            if (width, height) in all_dimensions:
+                all_dimensions[(width, height)].append(index)
+            else:
+                all_dimensions[(width, height)] = [ index ]
         return all_dimensions
 
 if __name__ == '__main__':
@@ -20,7 +27,7 @@ if __name__ == '__main__':
         help='is the filename of the input pdf file')
     args = parser.parse_args()
     print('File "{}" has following dimensions:'.format(args.input_filename))
-    for dims in get_pages_dimensions(args.input_filename):
-        print(' * {0}x{1}'.format(dims[0], dims[1]))
+    for dimensions in get_pages_dimensions(args.input_filename):
+        print(' * {0} x {1}'.format(dimensions[0], dimensions[1]))
 
 # EOF
