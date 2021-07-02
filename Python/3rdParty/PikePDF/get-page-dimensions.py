@@ -6,14 +6,15 @@ from argparse import ArgumentParser
 
 def get_pages_dimensions(input_filename):
     with open_pdf(input_filename) as pdf:
-        all_dimensions = dict()
         index = 0
+        all_dimensions = dict()
         for page in pdf.pages:
-            if not Name.MediaBox in page:
-                continue
-            mediabox = tuple(page.MediaBox)
-            width = round(2.54*float(mediabox[2] - mediabox[0])/72, 2)
-            height = round(2.54*float(mediabox[3] - mediabox[1])/72, 2)
+            if Name.CropBox in page:
+                box = tuple(page.CropBox)
+            else:
+                box = tuple(page.MediaBox)
+            width = round(2.54*float(box[2] - box[0])/72.0, 2)
+            height = round(2.54*float(box[3] - box[1])/72.0, 2)
             index += 1
             if (width, height) in all_dimensions:
                 all_dimensions[(width, height)].append(index)
