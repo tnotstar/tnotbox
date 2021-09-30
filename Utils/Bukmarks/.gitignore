@@ -1,0 +1,16 @@
+# Copyright 2021, Antonio Alvarado Hernández
+
+# intermediate files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# distribution & packing
+*.egg-info/
+*.egg
+MANIFEST
+
+# EOF
