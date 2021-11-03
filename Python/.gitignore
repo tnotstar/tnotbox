@@ -1,0 +1,56 @@
+#
+# loosely borrowed from
+# https://github.com/github/gitignore/blob/master/Python.gitignore
+#
+
+# byte-compiled / optimized / dynamic linked libraries
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# unit tests / coverage reports
+htmlcov/
+cover/
+.tox/
+.nox/
+.hypothesis/
+.pytest_cache/
+.coverage
+.coverage.*
+.cache
+*.cover
+*.py,cover
+nosetests.xml
+coverage.xml
+
+# distribution / packaging files
+.Python
+build/
+dist/
+eggs/
+.eggs/
+downloads/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+*.egg
+.installed.cfg
+MANIFEST
+
+# installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# translations files
+*.mo
+*.pot
+
+# EOF
