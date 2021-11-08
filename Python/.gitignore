@@ -53,4 +53,12 @@ pip-delete-this-directory.txt
 *.mo
 *.pot
 
+# backup and swaping files
+*~
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
 # EOF
