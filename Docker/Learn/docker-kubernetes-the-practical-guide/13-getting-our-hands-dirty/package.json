@@ -1,0 +1,14 @@
+{
+  "name": "handsdirty",
+  "version": "0.1.0",
+  "description": "this is just a simple demo application",
+  "main": "app.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Antonio Alvarado Hernández",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.2"
+  }
+}
