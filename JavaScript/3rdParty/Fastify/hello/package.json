@@ -1,0 +1,13 @@
+{
+  "name": "hello",
+  "version": "0.1.0",
+  "main": "hello.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Antonio Alvarado Hernández",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^3.28.0"
+  }
+}
