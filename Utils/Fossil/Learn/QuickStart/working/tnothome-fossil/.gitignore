@@ -1,0 +1,22 @@
+# -*- coding: utf-8 -*-
+# Copyright 2021, Antonio Alvarado Hernández
+
+
+                        # exclude all files from given directory
+bin/**
+var/**
+
+                        # avoid to commit binary files
+*.exe
+*.dll
+*.pyo
+*.pyc
+*.chm
+*.dat
+
+                        # avoid to commit vim backup & swap files
+*~
+*swp
+.netrwhist
+
+# EOF

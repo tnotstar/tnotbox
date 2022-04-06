@@ -1,0 +1,117 @@
+#
+# ~/Local/etc/bash/bashrc => ~/.bashrc
+#
+
+# source global definitions
+if [ -n "$BASH_VERSION" ]; then
+    __bashrc="/etc/bashrc"
+    if [ -f "${__bashrc}" ]; then
+        source "${__bashrc}"
+    fi
+fi
+
+#
+# user specific environment variables
+#
+
+# uncomment the following line if you don't like systemctl's auto-paging:
+# export SYSTEMD_PAGER=
+
+# add *my locals* to the enviroment
+__path="$HOME/Local/bin"
+if [ -d "$__path" ]; then
+    export PATH="$__path":$PATH
+fi
+
+# add support for anaconda-2.1.0
+__path="$HOME/Local/opt/anaconda/bin"
+if [ -d "$__path" ]; then
+    export PATH=$PATH:"$__path"
+fi
+
+# set up VISUAL and EDITOR environment variables
+#__editor=$(which vim 2> /dev/null || which vi 2> /dev/null)
+__editor=`command -v vim || command -v vi`
+if [ -n "${__editor}" ]; then
+    export EDITOR="${__editor}"
+    export VISUAL="${__editor}"
+fi
+
+# set up history's options
+export HISTTIMEFORMAT="%F %T  "
+
+# set up user variables for `virtualenvwrapper`
+export WORKON_HOME="$HOME/.local/var/lib/virtualenvs"
+export PROJECT_HOME="$HOME/Workspaces/Sandbox/Python"
+
+# read lazy loader for `virtualenvwrapper`
+__venv_wrappersh="/usr/bin/virtualenvwrapper_lazy.sh"
+if [ -f "${__venv_wrappersh}" ]; then
+    source "${__venv_wrappersh}"
+fi
+
+# set up the Go path
+export GOPATH="$HOME/.local/lib/go"
+
+# a work-around to use a Gtk+ theme inside Qt
+export GTK2_RC_FILES="$HOME/.gtkrc-2.0"
+
+#
+# user specific functions
+#
+
+__qpdf=`command -v qpdf`
+if [ -n "${__qpdf}" ]; then
+    function qpdfmerge {
+        local OUTPUT="$1" && shift
+        if [ -e "${OUTPUT}" ]; then
+            echo "Error: output file: \"${OUTPUT}\" already exists" 1>&2
+            return -1
+        fi
+        "${__qpdf}" --min-version=1.7 --linearize --normalize-content=y --object-streams=generate --stream-data=compress --empty --pages "$@" -- "${OUTPUT}"
+    }
+fi
+
+__wget=`command -v wget`
+if [ -n "${__wget}" ]; then
+    function wgetsite {
+        local URL="$1" && shift
+        if [ -z "${URL}" ]; then
+            echo "Error: missing url argument(s)" 1>&2
+            return -1
+        fi
+
+        "${__wget}" -mkKEp -np -w 5 --random-wait -t 5 "$URL" "$@"
+    }
+fi
+
+__exo_open=`command -v exo-open`
+if [ -n "${__exo_open}" ]; then
+    function terminal {
+        "${__exo_open}" --launch TerminalEmulator "$@"
+    }
+fi
+
+#
+# user specific aliases
+#
+
+alias ls="`command -v ls` --color=auto"
+alias rm="`command -v rm` -i"
+alias mv="`command -v mv` -i"
+alias cp="`command -v cp` -i"
+
+alias open="`command -v xdg-open`"
+alias start="`command -v xdg-open`"
+
+if [ -n "$EDITOR" ]; then
+    alias vi="`command -v $EDITOR`"
+fi
+
+#
+# user specific command calls
+#
+
+eval $(dircolors -b $HOME/.dircolors)
+
+# EOF
