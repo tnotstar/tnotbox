@@ -1,0 +1,7 @@
+# .gitignore
+
+lib/
+*.egg-info/
+.ipynb_checkpoints
+
+# EOF
