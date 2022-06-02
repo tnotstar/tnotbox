@@ -1,0 +1,11 @@
+{
+  "name": "lodash-sandbox",
+  "version": "0.1.0",
+  "main": "sandbox.js",
+  "author": "Antonio Alvarado Hernández",
+  "license": "ISC",
+  "devDependencies": {},
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}
