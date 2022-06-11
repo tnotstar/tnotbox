@@ -1,0 +1,12 @@
+[package]
+name = "hellorust"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "greeter_1"
+path = "src/greeter_1.rs"
+
+[[bin]]
+name = "greeter_2"
+path = "src/greeter_2.rs"
