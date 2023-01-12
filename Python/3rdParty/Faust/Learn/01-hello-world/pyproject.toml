@@ -1,0 +1,14 @@
+[tool.pdm]
+
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "Antonio Alvarado Hernández", email = "tnotstar@gmail.com"},
+]
+dependencies = [
+    "faust-streaming>=0.10.1",
+]
+requires-python = ">=3.10"
+license = {text = "MIT"}
