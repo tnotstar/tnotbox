@@ -1,6 +1,8 @@
 #
 # loosely borrowed from
-# https://github.com/github/gitignore/blob/master/Python.gitignore
+# <https://github.com/github/gitignore/blob/master/Python.gitignore>
+# and updated from
+# <https://github.com/pdm-project/pdm/blob/main/.gitignore>
 #
 
 # byte-compiled / optimized / dynamic linked libraries
@@ -26,12 +28,17 @@ cover/
 nosetests.xml
 coverage.xml
 
+# sphinx documentation
+docs/_build/
+docs/site
+
 # distribution / packaging files
 .Python
 build/
 dist/
-eggs/
 .eggs/
+eggs/
+develop-eggs/
 downloads/
 lib/
 lib64/
@@ -60,5 +67,18 @@ pip-delete-this-directory.txt
 [._]s[a-rt-v][a-z]
 [._]ss[a-gi-z]
 [._]sw[a-p]
+
+# updated to use pdm and others pep-582 based managers
+__pypackages__/
+.pdm.toml
+
+# legacy environments
+ENV/
+.env
+env/
+.venv
+venv/
+env.bak/
+venv.bak/
 
 # EOF
