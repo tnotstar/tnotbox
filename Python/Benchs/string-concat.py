@@ -21,7 +21,7 @@ def repstr2(value, count):
     value = value.encode()
     for i in range(count):
         buffer.frombytes(value)
-    return buffer.tostring()
+    return buffer.tobytes().decode("utf-8")
 
 
 def repstr3(value, count):
