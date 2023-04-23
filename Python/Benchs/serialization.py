@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import pprint as pp
-
-import pickle
+import marshal as pickle
 import timeit
 import functools
 
