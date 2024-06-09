@@ -1,0 +1,17 @@
+[project]
+name = "pywakolan"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "Antonio Alvarado Hernández", email = "tnotstar@duck.com"},
+]
+dependencies = [
+    "scapy>=2.5.0",
+]
+requires-python = "==3.12.*"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[tool.pdm]
+distribution = true
